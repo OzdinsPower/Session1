@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="УниверситетModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="C_Аттестации_студентов__">
+    <Key>
+      <PropertyRef Name="ИД" />
+    </Key>
+    <Property Name="ИД" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ФИО_студента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Предмет" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Аттестация_1" Type="Int32" />
+    <Property Name="Аттестация_2" Type="Int32" />
+    <Property Name="Аттестация_3" Type="Int32" />
+    <Property Name="Итого" Type="Int32" />
+    <Property Name="Оценка" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Студенты_" Relationship="Self.FK_Студенты___Аттестации_студентов__" FromRole="C_Аттестации_студентов__" ToRole="Студенты_" />
+  </EntityType>
+  <EntityType Name="Группа_">
+    <Key>
+      <PropertyRef Name="Группа" />
+    </Key>
+    <Property Name="Группа" Type="Int32" Nullable="false" />
+    <Property Name="Год_поступления" Type="Int32" />
+    <NavigationProperty Name="ДисциплиныГруппы_" Relationship="Self.FK_ДисциплиныГруппы__Группа_" FromRole="Группа_" ToRole="ДисциплиныГруппы_" />
+    <NavigationProperty Name="Студенты_" Relationship="Self.FK_Студенты__Группа_" FromRole="Группа_" ToRole="Студенты_" />
+  </EntityType>
+  <EntityType Name="Дисциплины_">
+    <Key>
+      <PropertyRef Name="Название" />
+    </Key>
+    <Property Name="Название" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Форма_аттестации" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ДисциплиныПреподаватели_" Relationship="Self.FK_ДисциплиныПреподаватели__Дисциплины_" FromRole="Дисциплины_" ToRole="ДисциплиныПреподаватели_" />
+  </EntityType>
+  <EntityType Name="Пользователи_">
+    <Key>
+      <PropertyRef Name="Логин" />
+    </Key>
+    <Property Name="Логин" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Пароль" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Адрес_электронной_почты" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Роль" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Преподаватели_" Relationship="Self.FK_Преподаватели__Пользователи_" FromRole="Пользователи_" ToRole="Преподаватели_" />
+    <NavigationProperty Name="Студенты_" Relationship="Self.FK_Студенты__Пользователи_" FromRole="Пользователи_" ToRole="Студенты_" />
+  </EntityType>
+  <EntityType Name="Преподаватели_">
+    <Key>
+      <PropertyRef Name="Логин" />
+    </Key>
+    <Property Name="ИД" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ФИО" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Логин" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Пользователи_" Relationship="Self.FK_Преподаватели__Пользователи_" FromRole="Преподаватели_" ToRole="Пользователи_" />
+    <NavigationProperty Name="ДисциплиныПреподаватели_" Relationship="Self.FK_ДисциплиныПреподаватели__Преподаватели_" FromRole="Преподаватели_" ToRole="ДисциплиныПреподаватели_" />
+  </EntityType>
+  <EntityType Name="ДисциплиныГруппы_">
+    <Key>
+      <PropertyRef Name="ИД" />
+    </Key>
+    <Property Name="ИД" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Номер_группы" Type="Int32" />
+    <Property Name="Название_предмета" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Группа_" Relationship="Self.FK_ДисциплиныГруппы__Группа_" FromRole="ДисциплиныГруппы_" ToRole="Группа_" />
+  </EntityType>
+  <EntityType Name="ДисциплиныПреподаватели_">
+    <Key>
+      <PropertyRef Name="ИД" />
+      <PropertyRef Name="Название_предмета" />
+    </Key>
+    <Property Name="ИД" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Логин_преподавателя" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Название_предмета" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Дисциплины_" Relationship="Self.FK_ДисциплиныПреподаватели__Дисциплины_" FromRole="ДисциплиныПреподаватели_" ToRole="Дисциплины_" />
+    <NavigationProperty Name="Преподаватели_" Relationship="Self.FK_ДисциплиныПреподаватели__Преподаватели_" FromRole="ДисциплиныПреподаватели_" ToRole="Преподаватели_" />
+  </EntityType>
+  <EntityType Name="Студенты_">
+    <Key>
+      <PropertyRef Name="Номер_группы" />
+      <PropertyRef Name="Логин" />
+    </Key>
+    <Property Name="ИД" Type="Int32" />
+    <Property Name="ФИО" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Номер_группы" Type="Int32" Nullable="false" />
+    <Property Name="Логин" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="C_Аттестации_студентов__" Relationship="Self.FK_Студенты___Аттестации_студентов__" FromRole="Студенты_" ToRole="C_Аттестации_студентов__" />
+    <NavigationProperty Name="Группа_" Relationship="Self.FK_Студенты__Группа_" FromRole="Студенты_" ToRole="Группа_" />
+    <NavigationProperty Name="Пользователи_" Relationship="Self.FK_Студенты__Пользователи_" FromRole="Студенты_" ToRole="Пользователи_" />
+  </EntityType>
+  <Association Name="FK_Студенты___Аттестации_студентов__">
+    <End Role="C_Аттестации_студентов__" Type="Self.C_Аттестации_студентов__" Multiplicity="0..1" />
+    <End Role="Студенты_" Type="Self.Студенты_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Аттестации_студентов__">
+        <PropertyRef Name="ИД" />
+      </Principal>
+      <Dependent Role="Студенты_">
+        <PropertyRef Name="ИД" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ДисциплиныГруппы__Группа_">
+    <End Role="Группа_" Type="Self.Группа_" Multiplicity="0..1" />
+    <End Role="ДисциплиныГруппы_" Type="Self.ДисциплиныГруппы_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Группа_">
+        <PropertyRef Name="Группа" />
+      </Principal>
+      <Dependent Role="ДисциплиныГруппы_">
+        <PropertyRef Name="Номер_группы" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Студенты__Группа_">
+    <End Role="Группа_" Type="Self.Группа_" Multiplicity="1" />
+    <End Role="Студенты_" Type="Self.Студенты_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Группа_">
+        <PropertyRef Name="Группа" />
+      </Principal>
+      <Dependent Role="Студенты_">
+        <PropertyRef Name="Номер_группы" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ДисциплиныПреподаватели__Дисциплины_">
+    <End Role="Дисциплины_" Type="Self.Дисциплины_" Multiplicity="1" />
+    <End Role="ДисциплиныПреподаватели_" Type="Self.ДисциплиныПреподаватели_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Дисциплины_">
+        <PropertyRef Name="Название" />
+      </Principal>
+      <Dependent Role="ДисциплиныПреподаватели_">
+        <PropertyRef Name="Название_предмета" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Преподаватели__Пользователи_">
+    <End Role="Пользователи_" Type="Self.Пользователи_" Multiplicity="1" />
+    <End Role="Преподаватели_" Type="Self.Преподаватели_" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Пользователи_">
+        <PropertyRef Name="Логин" />
+      </Principal>
+      <Dependent Role="Преподаватели_">
+        <PropertyRef Name="Логин" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Студенты__Пользователи_">
+    <End Role="Пользователи_" Type="Self.Пользователи_" Multiplicity="1" />
+    <End Role="Студенты_" Type="Self.Студенты_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Пользователи_">
+        <PropertyRef Name="Логин" />
+      </Principal>
+      <Dependent Role="Студенты_">
+        <PropertyRef Name="Логин" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ДисциплиныПреподаватели__Преподаватели_">
+    <End Role="Преподаватели_" Type="Self.Преподаватели_" Multiplicity="0..1" />
+    <End Role="ДисциплиныПреподаватели_" Type="Self.ДисциплиныПреподаватели_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Преподаватели_">
+        <PropertyRef Name="Логин" />
+      </Principal>
+      <Dependent Role="ДисциплиныПреподаватели_">
+        <PropertyRef Name="Логин_преподавателя" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="УниверситетEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="C_Аттестации_студентов__" EntityType="Self.C_Аттестации_студентов__" />
+    <EntitySet Name="Группа_" EntityType="Self.Группа_" />
+    <EntitySet Name="Дисциплины_" EntityType="Self.Дисциплины_" />
+    <EntitySet Name="Пользователи_" EntityType="Self.Пользователи_" />
+    <EntitySet Name="Преподаватели_" EntityType="Self.Преподаватели_" />
+    <EntitySet Name="ДисциплиныГруппы_" EntityType="Self.ДисциплиныГруппы_" />
+    <EntitySet Name="ДисциплиныПреподаватели_" EntityType="Self.ДисциплиныПреподаватели_" />
+    <EntitySet Name="Студенты_" EntityType="Self.Студенты_" />
+    <AssociationSet Name="FK_Студенты___Аттестации_студентов__" Association="Self.FK_Студенты___Аттестации_студентов__">
+      <End Role="C_Аттестации_студентов__" EntitySet="C_Аттестации_студентов__" />
+      <End Role="Студенты_" EntitySet="Студенты_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ДисциплиныГруппы__Группа_" Association="Self.FK_ДисциплиныГруппы__Группа_">
+      <End Role="Группа_" EntitySet="Группа_" />
+      <End Role="ДисциплиныГруппы_" EntitySet="ДисциплиныГруппы_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Студенты__Группа_" Association="Self.FK_Студенты__Группа_">
+      <End Role="Группа_" EntitySet="Группа_" />
+      <End Role="Студенты_" EntitySet="Студенты_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ДисциплиныПреподаватели__Дисциплины_" Association="Self.FK_ДисциплиныПреподаватели__Дисциплины_">
+      <End Role="Дисциплины_" EntitySet="Дисциплины_" />
+      <End Role="ДисциплиныПреподаватели_" EntitySet="ДисциплиныПреподаватели_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Преподаватели__Пользователи_" Association="Self.FK_Преподаватели__Пользователи_">
+      <End Role="Пользователи_" EntitySet="Пользователи_" />
+      <End Role="Преподаватели_" EntitySet="Преподаватели_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Студенты__Пользователи_" Association="Self.FK_Студенты__Пользователи_">
+      <End Role="Пользователи_" EntitySet="Пользователи_" />
+      <End Role="Студенты_" EntitySet="Студенты_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ДисциплиныПреподаватели__Преподаватели_" Association="Self.FK_ДисциплиныПреподаватели__Преподаватели_">
+      <End Role="Преподаватели_" EntitySet="Преподаватели_" />
+      <End Role="ДисциплиныПреподаватели_" EntitySet="ДисциплиныПреподаватели_" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

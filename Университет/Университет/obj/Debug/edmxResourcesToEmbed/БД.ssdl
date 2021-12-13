@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище УниверситетModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="'Аттестации студентов$'">
+    <Key>
+      <PropertyRef Name="ИД" />
+    </Key>
+    <Property Name="ИД" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ФИО_студента" Type="nvarchar" MaxLength="255" />
+    <Property Name="Предмет" Type="nvarchar" MaxLength="255" />
+    <Property Name="Аттестация 1" Type="int" />
+    <Property Name="Аттестация 2" Type="int" />
+    <Property Name="Аттестация 3" Type="int" />
+    <Property Name="Итого" Type="int" />
+    <Property Name="Оценка" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Группа$">
+    <Key>
+      <PropertyRef Name="Группа" />
+    </Key>
+    <Property Name="Группа" Type="int" Nullable="false" />
+    <Property Name="Год_поступления" Type="int" />
+  </EntityType>
+  <EntityType Name="Дисциплины$">
+    <Key>
+      <PropertyRef Name="Название" />
+    </Key>
+    <Property Name="Название" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Форма_аттестации" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Университет.dbo.ДисциплиныГруппы$" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="ДисциплиныГруппы$">
+    <Key>
+      <PropertyRef Name="ИД" />
+    </Key>
+    <Property Name="ИД" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Номер_группы" Type="int" />
+    <Property Name="Название_предмета" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Университет.dbo.ДисциплиныПреподаватели$" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="ДисциплиныПреподаватели$">
+    <Key>
+      <PropertyRef Name="ИД" />
+      <PropertyRef Name="Название_предмета" />
+    </Key>
+    <Property Name="ИД" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Логин_преподавателя" Type="nvarchar" MaxLength="255" />
+    <Property Name="Название_предмета" Type="nvarchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Пользователи$">
+    <Key>
+      <PropertyRef Name="Логин" />
+    </Key>
+    <Property Name="Логин" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Пароль" Type="nvarchar" MaxLength="255" />
+    <Property Name="Адрес электронной почты" Type="nvarchar" MaxLength="255" />
+    <Property Name="Роль" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Преподаватели$">
+    <Key>
+      <PropertyRef Name="Логин" />
+    </Key>
+    <Property Name="ИД" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ФИО" Type="nvarchar" MaxLength="255" />
+    <Property Name="Логин" Type="nvarchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Университет.dbo.Студенты$" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="Студенты$">
+    <Key>
+      <PropertyRef Name="Номер_группы" />
+      <PropertyRef Name="Логин" />
+    </Key>
+    <Property Name="ИД" Type="int" />
+    <Property Name="ФИО" Type="nvarchar" MaxLength="255" />
+    <Property Name="Номер_группы" Type="int" Nullable="false" />
+    <Property Name="Логин" Type="nvarchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_ДисциплиныГруппы$_Группа$">
+    <End Role="Группа$" Type="Self.Группа$" Multiplicity="0..1" />
+    <End Role="ДисциплиныГруппы$" Type="Self.ДисциплиныГруппы$" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Группа$">
+        <PropertyRef Name="Группа" />
+      </Principal>
+      <Dependent Role="ДисциплиныГруппы$">
+        <PropertyRef Name="Номер_группы" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ДисциплиныПреподаватели$_Дисциплины$">
+    <End Role="Дисциплины$" Type="Self.Дисциплины$" Multiplicity="1" />
+    <End Role="ДисциплиныПреподаватели$" Type="Self.ДисциплиныПреподаватели$" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Дисциплины$">
+        <PropertyRef Name="Название" />
+      </Principal>
+      <Dependent Role="ДисциплиныПреподаватели$">
+        <PropertyRef Name="Название_предмета" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ДисциплиныПреподаватели$_Преподаватели$">
+    <End Role="Преподаватели$" Type="Self.Преподаватели$" Multiplicity="0..1" />
+    <End Role="ДисциплиныПреподаватели$" Type="Self.ДисциплиныПреподаватели$" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Преподаватели$">
+        <PropertyRef Name="Логин" />
+      </Principal>
+      <Dependent Role="ДисциплиныПреподаватели$">
+        <PropertyRef Name="Логин_преподавателя" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Преподаватели$_Пользователи$">
+    <End Role="Пользователи$" Type="Self.Пользователи$" Multiplicity="1" />
+    <End Role="Преподаватели$" Type="Self.Преподаватели$" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Пользователи$">
+        <PropertyRef Name="Логин" />
+      </Principal>
+      <Dependent Role="Преподаватели$">
+        <PropertyRef Name="Логин" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Студенты$_'Аттестации студентов$'">
+    <End Role="'Аттестации студентов$'" Type="Self.'Аттестации студентов$'" Multiplicity="0..1" />
+    <End Role="Студенты$" Type="Self.Студенты$" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="'Аттестации студентов$'">
+        <PropertyRef Name="ИД" />
+      </Principal>
+      <Dependent Role="Студенты$">
+        <PropertyRef Name="ИД" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Студенты$_Группа$">
+    <End Role="Группа$" Type="Self.Группа$" Multiplicity="1" />
+    <End Role="Студенты$" Type="Self.Студенты$" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Группа$">
+        <PropertyRef Name="Группа" />
+      </Principal>
+      <Dependent Role="Студенты$">
+        <PropertyRef Name="Номер_группы" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Студенты$_Пользователи$">
+    <End Role="Пользователи$" Type="Self.Пользователи$" Multiplicity="1" />
+    <End Role="Студенты$" Type="Self.Студенты$" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Пользователи$">
+        <PropertyRef Name="Логин" />
+      </Principal>
+      <Dependent Role="Студенты$">
+        <PropertyRef Name="Логин" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище УниверситетModelContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="'Аттестации студентов$'" EntityType="Self.'Аттестации студентов$'" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Группа$" EntityType="Self.Группа$" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Дисциплины$" EntityType="Self.Дисциплины$" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Пользователи$" EntityType="Self.Пользователи$" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Преподаватели$" EntityType="Self.Преподаватели$" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ДисциплиныГруппы$" EntityType="Self.ДисциплиныГруппы$" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ДисциплиныГруппы$].[ИД] AS [ИД], 
+    [ДисциплиныГруппы$].[Номер_группы] AS [Номер_группы], 
+    [ДисциплиныГруппы$].[Название_предмета] AS [Название_предмета]
+    FROM [dbo].[ДисциплиныГруппы$] AS [ДисциплиныГруппы$]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="ДисциплиныПреподаватели$" EntityType="Self.ДисциплиныПреподаватели$" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ДисциплиныПреподаватели$].[ИД] AS [ИД], 
+    [ДисциплиныПреподаватели$].[Логин_преподавателя] AS [Логин_преподавателя], 
+    [ДисциплиныПреподаватели$].[Название_предмета] AS [Название_предмета]
+    FROM [dbo].[ДисциплиныПреподаватели$] AS [ДисциплиныПреподаватели$]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="Студенты$" EntityType="Self.Студенты$" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Студенты$].[ИД] AS [ИД], 
+    [Студенты$].[ФИО] AS [ФИО], 
+    [Студенты$].[Номер_группы] AS [Номер_группы], 
+    [Студенты$].[Логин] AS [Логин]
+    FROM [dbo].[Студенты$] AS [Студенты$]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_ДисциплиныГруппы$_Группа$" Association="Self.FK_ДисциплиныГруппы$_Группа$">
+      <End Role="Группа$" EntitySet="Группа$" />
+      <End Role="ДисциплиныГруппы$" EntitySet="ДисциплиныГруппы$" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ДисциплиныПреподаватели$_Дисциплины$" Association="Self.FK_ДисциплиныПреподаватели$_Дисциплины$">
+      <End Role="Дисциплины$" EntitySet="Дисциплины$" />
+      <End Role="ДисциплиныПреподаватели$" EntitySet="ДисциплиныПреподаватели$" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ДисциплиныПреподаватели$_Преподаватели$" Association="Self.FK_ДисциплиныПреподаватели$_Преподаватели$">
+      <End Role="Преподаватели$" EntitySet="Преподаватели$" />
+      <End Role="ДисциплиныПреподаватели$" EntitySet="ДисциплиныПреподаватели$" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Преподаватели$_Пользователи$" Association="Self.FK_Преподаватели$_Пользователи$">
+      <End Role="Пользователи$" EntitySet="Пользователи$" />
+      <End Role="Преподаватели$" EntitySet="Преподаватели$" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Студенты$_'Аттестации студентов$'" Association="Self.FK_Студенты$_'Аттестации студентов$'">
+      <End Role="'Аттестации студентов$'" EntitySet="'Аттестации студентов$'" />
+      <End Role="Студенты$" EntitySet="Студенты$" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Студенты$_Группа$" Association="Self.FK_Студенты$_Группа$">
+      <End Role="Группа$" EntitySet="Группа$" />
+      <End Role="Студенты$" EntitySet="Студенты$" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Студенты$_Пользователи$" Association="Self.FK_Студенты$_Пользователи$">
+      <End Role="Пользователи$" EntitySet="Пользователи$" />
+      <End Role="Студенты$" EntitySet="Студенты$" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
